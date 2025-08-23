@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Karir Kita - Tes Analisis Pekerjaan</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #3B71CA;
+            --secondary: #6C757D;
+            --success: #14A44D;
+            --danger: #DC4C64;
+            --warning: #E4A11B;
+            --info: #54B4D3;
+            --light: #F8F9FA;
+            --dark: #332D2D;
+            --bg-gradient: linear-gradient(135deg, #3B71CA 0%, #6C757D 100%);
+            --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #333;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding-top: 80px;
+        }
+
+        .navbar {
+            background: var(--bg-gradient);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 0.8rem 0;
+        }
+
+        .navbar-brand {
+            font-weight: 800;
+            font-size: 1.8rem;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-link {
+            font-weight: 600;
+            padding: 0.5rem 1rem !important;
+            border-radius: 8px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover {
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+
+        .page {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            min-height: calc(100vh - 80px);
+            padding: 2rem 0;
+        }
+
+        .page.active {
+            display: block;
+            opacity: 1;
+        }
+
+        .card {
+            border-radius: 18px;
+            overflow: hidden;
+            transition: var(--transition);
+            border: none;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 2rem;
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-header {
+            padding: 1.5rem 2rem;
+            font-weight: 700;
+        }
+
+        .card-body {
+            padding: 2rem;
+        }
+
+        .bg-gradient-primary {
+            background: var(--bg-gradient) !important;
+        }
+
+        .bg-gradient-success {
+            background: linear-gradient(135deg, var(--success) 0%, #17c976 100%) !important;
+        }
+
+        .bg-gradient-info {
+            background: linear-gradient(135deg, var(--info) 0%, #6f42c1 100%) !important;
+        }
+
+        .btn {
+            border-radius: 10px;
+            font-weight: 600;
+            transition: var(--transition);
+            padding: 0.8rem 1.8rem;
+            border: none;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        .btn-primary {
+            background: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background: #2a5aa7;
+        }
+
+        .btn-lg {
+            padding: 1rem 2.5rem;
+            font-size: 1.2rem;
+        }
+
+        .option-card {
+            cursor: pointer;
+            transition: var(--transition);
+            border: 2px solid transparent;
+            padding: 1.2rem 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 12px;
+            background-color: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+            display: flex;
+            align-items: center;
+        }
+
+        .option-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+            border-color: var(--primary);
+        }
+
+        .option-card.selected {
+            border-color: var(--primary);
+            background-color: rgba(59, 113, 202, 0.1);
+        }
+
+        .option-card .form-check-input {
+            width: 1.4em;
+            height: 1.4em;
+            margin-right: 1rem;
+        }
+
+        .option-card .form-check-label {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        .progress {
+            height: 14px;
+            border-radius: 10px;
+            background-color: #e9ecef;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            border-radius: 10px;
+            transition: width 0.8s cubic-bezier(0.22, 0.61, 0.36, 1);
+        }
+
+        #job-icon {
+            transition: transform 0.5s;
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #job-icon:hover {
+            transform: scale(1.1) rotate(5deg);
+        }
+
+        #timer {
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 0.5rem 1.2rem;
+            border-radius: 25px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+
+        .ai-response {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-left: 5px solid var(--primary);
+            padding: 1.8rem;
+            border-radius: 12px;
+            margin-top: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .stat-bar {
+            height: 22px;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 0.5rem;
+        }
+
+        .feature-icon {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.2rem;
+            font-size: 1.8rem;
+            background: linear-gradient(135deg, rgba(59, 113, 202, 0.15) 0%, rgba(108, 117, 125, 0.1) 100%);
+            color: var(--primary);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+        }
+
+        .floating-icon {
+            animation: float 3.5s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        .fade-in {
+            animation: fadeIn 0.7s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(25px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .home-feature {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .home-feature:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .home-feature .icon {
+            font-size: 3rem;
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+        }
+
+        .creator-card {
+            text-align: center;
+            padding: 2rem;
+            border-radius: 15px;
+            background: white;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            transition: var(--transition);
+            height: 100%;
+        }
+
+        .creator-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .creator-img {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 0 auto 1.5rem;
+            border: 5px solid #f0f0f0;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .contact-form {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+        }
+
+        .testimonial {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .testimonial:after {
+            content: '"';
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 5rem;
+            color: rgba(59, 113, 202, 0.1);
+            font-family: Arial;
+        }
+
+        footer {
+            background: var(--dark);
+            color: white;
+            padding: 3rem 0 1.5rem;
+            margin-top: 3rem;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            margin-right: 0.8rem;
+            transition: var(--transition);
+        }
+
+        .social-icon:hover {
+            background: var(--primary);
+            transform: translateY(-3px);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 992px) {
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .display-1 {
+                font-size: 3.5rem;
+            }
+            
+            .option-card .form-check-label {
+                font-size: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            body {
+                padding-top: 76px;
+            }
+            
+            .btn-lg {
+                padding: 0.9rem 1.8rem;
+                font-size: 1.1rem;
+            }
+            
+            .card-body {
+                padding: 1.5rem;
+            }
+            
+            .ai-response {
+                padding: 1.2rem;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .navbar-brand {
+                font-size: 1.5rem;
+            }
+            
+            .page {
+                padding: 1.5rem 0;
+            }
+            
+            .card-body {
+                padding: 1.2rem;
+            }
+            
+            .option-card {
+                padding: 1rem;
+            }
+            
+            .btn {
+                padding: 0.7rem 1.5rem;
+            }
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #2a5aa7;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-brain me-2"></i>Karir Kita
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="#" id="nav-home">
+                            <i class="fas fa-home me-1"></i> Beranda
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-creator">
+                            <i class="fas fa-users me-1"></i> Creator
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="nav-contact">
+                            <i class="fas fa-envelope me-1"></i> Kontak
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="container">
+        <!-- Home Page -->
+        <section id="home-page" class="page active">
+            <div class="text-center mb-5">
+                <h1 class="display-4 fw-bold text-primary mb-3">Temukan Karir Ideal Anda</h1>
+                <p class="lead mx-auto" style="max-width: 700px;">Dengan tes analisis karir kami, temukan pekerjaan yang paling cocok dengan kepribadian, minat, dan bakat Anda menggunakan teknologi AI canggih.</p>
+                <button id="start-test-btn" class="btn btn-primary btn-lg mt-4 pulse">
+                    <i class="fas fa-play-circle me-2"></i>Mulai Tes Sekarang
+                </button>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-md-4 mb-4">
+                    <div class="home-feature">
+                        <div class="icon">
+                            <i class="fas fa-brain"></i>
+                        </div>
+                        <h4 class="fw-bold">Analisis Mendalam</h4>
+                        <p>25 pertanyaan yang dirancang khusus untuk menganalisis kepribadian dan preferensi karir Anda.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="home-feature">
+                        <div class="icon">
+                            <i class="fas fa-robot"></i>
+                        </div>
+                        <h4 class="fw-bold">Teknologi AI</h4>
+                        <p>Memanfaatkan kecerdasan buatan Gemini untuk analisis yang akurat dan rekomendasi yang tepat.</p>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="home-feature">
+                        <div class="icon">
+                            <i class="fas fa-chart-line"></i>
+                        </div>
+                        <h4 class="fw-bold">Laporan Detail</h4>
+                        <p>Dapatkan laporan komprehensif tentang kekuatan Anda dan rekomendasi karir yang sesuai.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row align-items-center mb-5">
+                <div class="col-lg-6">
+                    <h2 class="fw-bold mb-4">Mengapa Memilih Karir Kita?</h2>
+                    <p>Karir Kita didesain oleh para ahli karir dan psikolog untuk membantu Anda menemukan jalan karir yang paling sesuai dengan kepribadian dan minat Anda.</p>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Analisis berbasis ilmu psikologi terbaru</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Teknologi AI untuk akurasi maksimal</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Rekomendasi karir yang dipersonalisasi</li>
+                        <li class="mb-2"><i class="fas fa-check-circle text-success me-2"></i> Laporan detail yang mudah dipahami</li>
+                    </ul>
+                </div>
+                <div class="col-lg-6 text-center">
+                    <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNTAwIiBoZWlnaHQ9IjQwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjVmN2ZiIi8+PGNpcmNsZSBjeD0iMjUwIiBjeT0iMTUwIiByPSI4MCIgZmlsbD0iI2U3ZWZmZiIvPjxjaXJjbGUgY3g9IjI1MCIgY3k9IjE1MCIgcj0iNjAiIGZpbGw9IiM0Mjg1ZjQiLz48cGF0aCBkPSJNMjIwIDE1MEwyNTAgMTIwTDI4MCAxNTBMMjUwIDE4MFoiIGZpbGw9IiNmZmYiLz48dGV4dCB4PSIyNTAiIHk9IjI4MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjI0IiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzMzMiI+S2FyaXIgS2l0YTwvdGV4dD48dGV4dCB4PSIyNTAiIHk9IjMxMCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE4IiBmaWxsPSIjNjY2Ij5UZW11a2FuIEthcmlyIElkZWFsIEFuZGE8L3RleHQ+PC9zdmc+" alt="Karir Kita" class="img-fluid" style="max-width: 100%; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1);">
+                </div>
+            </div>
+
+            <div class="mb-5">
+                <h2 class="text-center fw-bold mb-4">Apa Kata Mereka?</h2>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="testimonial">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-primary rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <span class="text-white fw-bold">A</span>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Ahmad</h5>
+                                    <small class="text-muted">Software Developer</small>
+                                </div>
+                            </div>
+                            <p class="mb-0">"Berkat Karir Kita, saya menemukan bahwa karir di bidang teknologi sesuai dengan kepribadian saya. Sekarang saya bekerja sebagai developer dan merasa sangat puas dengan pilihan karir ini."</p>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="testimonial">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-success rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                    <span class="text-white fw-bold">S</span>
+                                </div>
+                                <div class="ms-3">
+                                    <h5 class="mb-0">Sari</h5>
+                                    <small class="text-muted">Marketing Manager</small>
+                                </div>
+                            </div>
+                            <p class="mb-0">"Tes ini sangat akurat! Hasilnya merekomendasikan karir di bidang marketing yang sesuai dengan kepribadian ekstrovert dan kreatif saya. Sekarang saya menjalani karir yang saya cintai."</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Start Page -->
+        <section id="start-page" class="page">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-gradient-primary text-white text-center py-4">
+                            <div class="floating-icon">
+                                <i class="fas fa-rocket display-4"></i>
+                            </div>
+                            <h2 class="fw-bold mt-3">Tes Analisis Pekerjaan</h2>
+                            <p class="mb-0">Temukan karir yang paling cocok dengan kepribadian Anda</p>
+                        </div>
+                        <div class="card-body p-5">
+                            <div class="text-center mb-4">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48Y2lyY2xlIGN4PSIxMDAiIGN5PSIxMDAiIHI9IjkwIiBmaWxsPSIjZTdlZmZmIi8+PHBhdGggZD0iTTcwIDEwMEwxMDAgNzBMMTMwIDEwMEwxMDAgMTMwWiIgZmlsbD0iIzQyODVmNCIvPjxjaXJjbGUgY3g9IjEwMCIgY3k9IjcwIiByPSIxNSIgZmlsbD0iI2ZmZiIvPjwvc3ZnPg==" alt="Career Analysis" class="img-fluid mb-3" style="max-width: 200px;">
+                            </div>
+                            <p class="text-center mb-4">Tes ini terdiri dari 25 pertanyaan yang akan menganalisis kepribadian Anda dan merekomendasikan pekerjaan yang paling sesuai dengan bantuan AI Gemini.</p>
+                            
+                            <div class="mb-4">
+                                <label for="api-key" class="form-label fw-bold">API Key Gemini</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-key"></i></span>
+                                    <input type="password" class="form-control" id="api-key" placeholder="Masukkan API key Gemini Anda">
+                                </div>
+                                <div class="form-text">API key Anda tidak disimpan di server manapun dan hanya digunakan untuk analisis ini.</div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="name" class="form-label fw-bold">Nama Lengkap</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                    <input type="text" class="form-control" id="name" placeholder="Masukkan nama lengkap Anda">
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <label for="email" class="form-label fw-bold">Email</label>
+                                <div class="input-group">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                    <input type="email" class="form-control" id="email" placeholder="Masukkan email Anda">
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button id="start-btn" class="btn btn-primary btn-lg mt-3">
+                                    <i class="fas fa-play-circle me-2"></i>Mulai Tes
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Test Page -->
+        <section id="test-page" class="page">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-gradient-primary text-white py-3">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">Tes Analisis Pekerjaan</h5>
+                                <div id="timer" class="fw-bold">00:00</div>
+                            </div>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="progress mb-4" style="height: 12px;">
+                                <div id="progress-bar" class="progress-bar progress-bar-striped progress-bar-animated" role="progressbar" style="width: 4%;"></div>
+                            </div>
+                            <p class="text-muted text-center">Pertanyaan <span id="current-question">1</span> dari <span id="total-questions">25</span></p>
+                            
+                            <div id="question-container" class="mb-4">
+                                <!-- Question will be loaded here by JavaScript -->
+                            </div>
+                            
+                            <div class="d-flex justify-content-between">
+                                <button id="prev-btn" class="btn btn-outline-primary" disabled>
+                                    <i class="fas fa-arrow-left me-2"></i>Sebelumnya
+                                </button>
+                                <button id="next-btn" class="btn btn-primary">
+                                    Selanjutnya<i class="fas fa-arrow-right ms-2"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Result Page -->
+        <section id="result-page" class="page">
+            <div class="row justify-content-center">
+                <div class="col-lg-10">
+                    <div class="text-center mb-4 fade-in">
+                        <h2 class="fw-bold text-primary">Hasil Analisis Karir Anda</h2>
+                        <p class="lead">Berdasarkan jawaban Anda, berikut adalah hasil analisis kami</p>
+                    </div>
+                    
+                    <div id="error-container" class="alert alert-danger d-none">
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        <span id="error-message"></span>
+                    </div>
+                    
+                    <div class="card shadow-lg mb-4 fade-in">
+                        <div class="card-header bg-gradient-success text-white py-3">
+                            <h4 class="mb-0"><i class="fas fa-award me-2"></i>Rekomendasi Pekerjaan</h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="text-center mb-4">
+                                <div id="job-icon" class="display-1 text-primary mb-3">
+                                    <i class="fas fa-laptop-code"></i>
+                                </div>
+                                <h3 id="job-title" class="fw-bold">Software Developer</h3>
+                                <div id="job-match" class="badge bg-success fs-6 mb-3"></div>
+                            </div>
+                            <div id="job-description" class="mb-4">
+                                <p>Software Developer merancang, mengembangkan, dan memelihara aplikasi perangkat lunak. Pekerjaan ini membutuhkan kemampuan pemecahan masalah, logika yang kuat, dan kreativitas dalam menciptakan solusi digital.</p>
+                            </div>
+                            
+                            <h5 class="fw-bold mt-4 mb-3">Analisis Gemini AI:</h5>
+                            <div id="ai-analysis" class="ai-response">
+                                <div id="ai-content">
+                                    <p>Berdasarkan jawaban Anda, kami melihat bahwa Anda memiliki profil yang sangat cocok untuk karir di bidang teknologi. Anda menunjukkan kemampuan analitis yang kuat, ketelitian dalam menyelesaikan masalah, dan minat dalam bekerja secara mandiri maupun kolaboratif.</p>
+                                    <p>Sebagai Software Developer, Anda akan dapat memanfaatkan kekuatan logika dan kreativitas Anda untuk menciptakan solusi inovatif. Lingkungan kerja yang fleksibel dan terus berkembang di industri tech akan sesuai dengan kepribadian Anda yang adaptif dan selalu ingin belajar hal baru.</p>
+                                    <p>Bidang ini menawarkan peluang karir yang luas dengan pertumbuhan yang stabil. Dengan kemampuan problem-solving yang Anda miliki, Anda akan dapat berkontribusi dalam menciptakan solusi teknologi yang berdampak positif bagi masyarakat.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="card shadow-lg mb-4 fade-in">
+                        <div class="card-header bg-gradient-info text-white py-3">
+                            <h4 class="mb-0"><i class="fas fa-chart-bar me-2"></i>Profil Kepribadian</h4>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="row">
+                                <div class="col-md-6 mb-4">
+                                    <h6 class="fw-bold">Introvert/Extrovert</h6>
+                                    <div class="progress mb-2 stat-bar">
+                                        <div class="progress-bar bg-info" role="progressbar" style="width: 65%;">65% Extrovert</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between small text-muted">
+                                        <span>Introvert</span>
+                                        <span>Extrovert</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <h6 class="fw-bold">Endurance/Power</h6>
+                                    <div class="progress mb-2 stat-bar">
+                                        <div class="progress-bar bg-warning" role="progressbar" style="width: 40%;">40% Power</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between small text-muted">
+                                        <span>Endurance</span>
+                                        <span>Power</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <h6 class="fw-bold">Analitis/Kreatif</h6>
+                                    <div class="progress mb-2 stat-bar">
+                                        <div class="progress-bar bg-success" role="progressbar" style="width: 80%;">80% Analitis</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between small text-muted">
+                                        <span>Analitis</span>
+                                        <span>Kreatif</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 mb-4">
+                                    <h6 class="fw-bold">Independen/Kolaboratif</h6>
+                                    <div class="progress mb-2 stat-bar">
+                                        <div class="progress-bar bg-primary" role="progressbar" style="width: 55%;">55% Kolaboratif</div>
+                                    </div>
+                                    <div class="d-flex justify-content-between small text-muted">
+                                        <span>Independen</span>
+                                        <span>Kolaboratif</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-center mt-4">
+                        <button id="restart-btn" class="btn btn-primary btn-lg me-md-2">
+                            <i class="fas fa-redo me-2"></i>Ulangi Tes
+                        </button>
+                        <button id="download-btn" class="btn btn-outline-primary btn-lg">
+                            <i class="fas fa-download me-2"></i>Download Hasil
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Creator Page -->
+        <section id="creator-page" class="page">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-primary">Tim Developer Karir Kita</h2>
+                <p class="lead">Kenali tim di balik pengembangan platform Karir Kita</p>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <div class="creator-card">
+                        <img src="src/than.jpg" alt="Creator" class="creator-img">
+                        <h4 class="fw-bold">Fadhil Sulthan</h4>
+                        <p class="text-primary mb-2">Developer</p>
+                        <p>Saya adalah seorang Developer yang bersemangat dalam merancang dan membangun aplikasi yang bermanfaat. Dengan fokus pada penulisan kode yang bersih (clean code) dan skalabel, saya bertujuan menciptakan solusi teknologi yang menjawab kebutuhan nyata pengguna dan bisnis.</p>
+                        <div class="mt-3">
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="creator-card">
+                        <img src="src/mostar.jpg" alt="Creator" class="creator-img">
+                        <h4 class="fw-bold">Athar Aydin</h4>
+                        <p class="text-primary mb-2">Video Grapher</p>
+                        <p>Bagi saya, videografi adalah seni menangkap emosi dan energi dalam setiap frame. Saya berfokus untuk menciptakan karya visual yang tidak hanya indah dilihat, tetapi juga mampu bercerita dan meninggalkan kesan mendalam.</p>
+                        <div class="mt-3">
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-dribbble"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-behance"></i></a>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="creator-card">
+                        <img src="src/nadip.jpg" alt="Creator" class="creator-img">
+                        <h4 class="fw-bold">Nadhif Akmal</h4>
+                        <p class="text-primary mb-2">psikolog</p>
+                        <p>Saya percaya bahwa setiap individu memiliki kekuatan untuk bertumbuh dan sembuh. Sebagai psikolog, saya hadir untuk mendengarkan dengan empati dan mendampingi Anda dalam perjalanan memahami diri sendiri lebih dalam, mengelola emosi, dan membangun kehidupan yang lebih seimbang dan bermakna.</p>
+                        <div class="mt-3">
+                            <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-kaggle"></i></a>
+                            <a href="#" class="social-icon"><i class="fab fa-medium"></i></a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-lg-8 mx-auto">
+                    <div class="card shadow-lg">
+                        <div class="card-header bg-gradient-primary text-white py-3">
+                            <h4 class="mb-0"><i class="fas fa-history me-2"></i>Sejarah Karir Kita</h4>
+                        </div>
+                        <div class="card-body">
+                            <p>Karir Kita dimulai pada tahun 2025 sebagai proyek penelitian di SMKN 8 MALANG yang bertujuan untuk membantu para pencari kerja menemukan jalur karir yang sesuai dengan kepribadian mereka.</p>
+                            <p>Dengan kolaborasi antara psikolog, video grapher, dan developer, kami mengembangkan algoritma canggih yang dapat menganalisis kepribadian dan memberikan rekomendasi karir yang tepat.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact-page" class="page">
+            <div class="text-center mb-5">
+                <h2 class="fw-bold text-primary">Hubungi Kami</h2>
+                <p class="lead">Punya pertanyaan atau masukan? Silakan hubungi tim kami</p>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-8 mx-auto">
+                    <div class="contact-form">
+                        <form id="contact-form">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <label for="contact-name" class="form-label">Nama Lengkap</label>
+                                    <input type="text" class="form-control" id="contact-name" required>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <label for="contact-email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="contact-email" required>
+                                </div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact-subject" class="form-label">Subjek</label>
+                                <input type="text" class="form-control" id="contact-subject" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="contact-message" class="form-label">Pesan</label>
+                                <textarea class="form-control" id="contact-message" rows="5" required></textarea>
+                            </div>
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-primary btn-lg">
+                                    <i class="fas fa-paper-plane me-2"></i>Kirim Pesan
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5">
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <h5 class="fw-bold">Lokasi</h5>
+                            <p>Malang, Indonesia</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <h5 class="fw-bold">Telepon</h5>
+                            <p>+62 851-9819-7271<br>+62 822-3312-8061<br>+62 856-0703-5385</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <div class="card shadow-sm h-100">
+                        <div class="card-body text-center">
+                            <div class="feature-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <h5 class="fw-bold">Email</h5>
+                            <p>thanzero01@gmail.com</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white mt-5">
+        <div class="container py-5">
+            <div class="row">
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">Karir Kita</h5>
+                    <p>Temukan jalan karir yang tepat dengan analisis AI yang canggih.</p>
+                    <div class="mt-3">
+                        <a href="https://www.facebook.com/share/1B7fWtjbrp/" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+                        <a href="https://x.com/Thanzero232483?t=VZpZCGrDPUfeIFXVMlUutA&s=09" class="social-icon"><i class="fab fa-twitter"></i></a>
+                        <a href="https://www.instagram.com/zenxc7?igsh=MXQ5eDBwOGkwZ3JuYQ==" class="social-icon"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="fw-bold">Tautan</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">Beranda</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Tentang</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Layanan</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Kontak</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-2 mb-4">
+                    <h5 class="fw-bold">Sumber Daya</h5>
+                    <ul class="list-unstyled">
+                        <li><a href="#" class="text-white text-decoration-none">Blog</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">FAQ</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Bantuan</a></li>
+                        <li><a href="#" class="text-white text-decoration-none">Privasi</a></li>
+                    </ul>
+                </div>
+                <div class="col-md-4 mb-4">
+                    <h5 class="fw-bold">Berlangganan Newsletter</h5>
+                    <p>Dapatkan update terbaru tentang karir dan perkembangan kami.</p>
+                    <div class="input-group mb-3">
+                        <input type="email" class="form-control" placeholder="Email Anda">
+                        <button class="btn btn-primary" type="button">Berlangganan</button>
+                    </div>
+                </div>
+            </div>
+            <hr class="my-4">
+            <div class="row">
+                <div class="col-md-6">
+                    <p>&copy; 2025 Karir Kita. All rights reserved.</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <p>Made with <i class="fas fa-heart text-danger"></i> in Indonesia</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        // Data pertanyaan
+        const questions = [
+            "Saya merasa berenergi ketika berada di sekitar banyak orang.",
+            "Saya lebih suka bekerja sendiri daripada dalam tim.",
+            "Saya senang memecahkan masalah yang kompleks.",
+            "Saya lebih memilih rutinitas yang teratur daripada perubahan yang tidak terduga.",
+            "Saya merasa puas ketika membantu orang lain.",
+            "Saya senang mengambil risiko dalam pengambilan keputusan.",
+            "Saya lebih suka bekerja dengan ide-ide daripada dengan benda fisik.",
+            "Saya menikmati pekerjaan yang membutuhkan ketelitian dan detail.",
+            "Saya merasa nyaman memimpin orang lain.",
+            "Saya lebih memilih lingkungan kerja yang tenang dan teratur.",
+            "Saya senang belajar keterampilan baru secara terus-menerus.",
+            "Saya merasa termotivasi oleh tenggat waktu yang ketat.",
+            "Saya menikmati pekerjaan yang melibatkan kreativitas dan imajinasi.",
+            "Saya lebih memilih stabilitas pekerjaan daripada potensi penghasilan besar.",
+            "Saya senang bekerja dengan angka dan data.",
+            "Saya merasa puas ketika dapat melihat hasil nyata dari pekerjaan saya.",
+            "Saya nyaman beradaptasi dengan perubahan yang cepat.",
+            "Saya menikmati mentoring atau mengajar orang lain.",
+            "Saya lebih suka bekerja pada beberapa proyek sekaligus.",
+            "Saya senang menganalisis tren dan pola.",
+            "Saya merasa termotivasi oleh kompetisi dan pencapaian.",
+            "Saya lebih memilih pekerjaan yang memungkinkan saya bekerja dari rumah.",
+            "Saya senang membangun hubungan jangka panjang dengan klien atau rekan kerja.",
+            "Saya merasa nyaman dengan pekerjaan yang berisiko tinggi.",
+            "Saya menikmati pekerjaan yang memberikan dampak sosial positif."
+        ];
+
+        // Opsi jawaban
+        const answerOptions = [
+            "Sangat Setuju",
+            "Setuju",
+            "Ragu",
+            "Kurang Setuju",
+            "Tidak Setuju"
+        ];
+
+        // Tipe pekerjaan
+        const jobTypes = [
+            {
+                title: "Software Developer",
+                icon: "fa-laptop-code",
+                description: "Software Developer merancang, mengembangkan, dan memelihara aplikasi perangkat lunak. Pekerjaan ini membutuhkan kemampuan pemecahan masalah, logika yang kuat, dan kreativitas dalam menciptakan solusi digital."
+            },
+            {
+                title: "Marketing Manager",
+                icon: "fa-chart-line",
+                description: "Marketing Manager mengembangkan strategi pemasaran, menganalisis tren pasar, dan memimpin kampanye promosi. Peran ini membutuhkan kreativitas, kemampuan analitis, dan keterampilan komunikasi yang kuat."
+            },
+            {
+                title: "Akuntan",
+                icon: "fa-calculator",
+                description: "Akuntan mengelola dan menganalisis catatan keuangan, memastikan kepatuhan terhadap peraturan, dan memberikan saran keuangan. Pekerjaan ini membutuhkan ketelitian, analitis, dan integritas yang tinggi."
+            },
+            {
+                title: "Perawat",
+                icon: "fa-user-md",
+                description: "Perawat memberikan perawatan medis, dukungan emosional, dan pendidikan kesehatan kepada pasien. Profesi ini membutuhkan empati, ketahanan, dan kemampuan bekerja under pressure."
+            },
+            {
+                title: "Guru",
+                icon: "fa-chalkboard-teacher",
+                description: "Guru merencanakan dan memberikan instruksi edukatif, mengevaluasi kemajuan siswa, dan menciptakan lingkungan belajar yang mendukung. Peran ini membutuhkan kesabaran, komunikasi, dan passion untuk pendidikan."
+            },
+            {
+                title: "Desainer Grafis",
+                icon: "fa-paint-brush",
+                description: "Desainer Grafis menciptakan visual concepts untuk mengkomunikasikan ide yang menginspirasi, menginformasikan, atau memikat konsumen. Pekerjaan ini membutuhkan kreativitas, kepekaan estetika, dan kemampuan teknis."
+            },
+            {
+                title: "Sales Representative",
+                icon: "fa-handshake",
+                description: "Sales Representative menjual produk atau jasa kepada pelanggan, membangun hubungan klien, dan mencapai target penjualan. Peran ini membutuhkan komunikasi persuasif, ketahanan, dan kemampuan membangun relasi."
+            },
+            {
+                title: "Analisis Data",
+                icon: "fa-database",
+                description: "Analisis Data mengumpulkan, memproses, dan melakukan analisis statistik pada dataset untuk menginformasikan pengambilan keputusan. Pekerjaan ini membutuhkan kemampuan analitis, perhatian terhadap detail, dan keahlian teknis."
+            }
+        ];
+
+        // AI Analysis responses
+        const aiResponses = {
+            "Software Developer": "Berdasarkan jawaban Anda, kami melihat bahwa Anda memiliki profil yang sangat cocok untuk karir di bidang teknologi. Anda menunjukkan kemampuan analitis yang kuat, ketelitian dalam menyelesaikan masalah, dan minat dalam bekerja secara mandiri maupun kolaboratif. Sebagai Software Developer, Anda akan dapat memanfaatkan kekuatan logika dan kreativitas Anda untuk menciptakan solusi inovatif. Lingkungan kerja yang fleksibel dan terus berkembang di industri tech akan sesuai dengan kepribadian Anda yang adaptif dan selalu ingin belajar hal baru. Bidang ini menawarkan peluang karir yang luas dengan pertumbuhan yang stabil. Dengan kemampuan problem-solving yang Anda miliki, Anda akan dapat berkontribusi dalam menciptakan solusi teknologi yang berdampak positif bagi masyarakat. Perkembangan teknologi seperti AI, cloud computing, dan IoT membuka peluang baru bagi Software Developer untuk terus berkembang dan mengasah keterampilan.",
+            "Marketing Manager": "Analisis kami menunjukkan bahwa Anda memiliki bakat alami dalam komunikasi dan persuasi, dengan kemampuan memahami kebutuhan orang lain. Karir di bidang pemasaran akan memungkinkan Anda menggunakan kekuatan kreativitas dan analisis pasar Anda. Sebagai Marketing Manager, Anda akan berkembang dalam lingkungan yang dinamis dan berorientasi pada hasil, dengan kesempatan untuk memimpin tim dan kampanye yang impactful. Anda akan bertanggung jawab untuk mengembangkan strategi pemasaran, menganalisis tren pasar, dan mengoptimalkan ROI dari kampanye pemasaran. Kemampuan Anda dalam berpikir strategis dan memahami perilaku konsumen akan menjadi aset berharga dalam peran ini. Dengan perkembangan digital marketing yang pesat, Anda akan memiliki peluang untuk terus belajar dan mengembangkan keterampilan baru dalam bidang yang selalu berkembang ini.",
+            "Akuntan": "Berdasarkan profil Anda, kami menemukan kecocokan yang kuat dengan karir di bidang akuntansi. Anda menunjukkan perhatian terhadap detail, kemampuan bekerja dengan data numerik, dan nilai-nilai integritas yang tinggi. Sebagai Akuntan, Anda akan menghargai struktur dan prediktabilitas lingkungan kerja, sambil memberikan kontribusi penting bagi kesehatan finansial organisasi. Peran ini membutuhkan pemahaman mendalam tentang prinsip-prinsip akuntansi, perpajakan, dan regulasi keuangan. Anda akan bertanggung jawab untuk menyiapkan laporan keuangan, melakukan audit, dan memberikan saran finansial kepada manajemen. Dengan sertifikasi profesional seperti CPA atau CMA, Anda dapat meningkatkan kredibilitas dan membuka peluang karir yang lebih luas. Stabilitas karir dan permintaan yang konsisten untuk profesional akuntansi membuat bidang ini menjadi pilihan yang menjanjikan.",
+            "Perawat": "Jawaban Anda mengungkapkan profil kepedulian dan ketahanan yang sangat sesuai dengan profesi keperawatan. Anda menunjukkan empati yang mendalam, kemampuan bekerja under pressure, dan keinginan tulus untuk membantu orang lain. Sebagai Perawat, Anda akan menemukan kepuasan dalam membuat perbedaan langsung dalam kehidupan pasien dan komunitas kesehatan. Peran ini membutuhkan kombinasi keterampilan teknis medis dan kemampuan interpersonal yang kuat. Anda akan bertanggung jawab untuk memberikan perawatan langsung, memantau kondisi pasien, dan berkolaborasi dengan tim medis lainnya. Dengan spesialisasi dalam area seperti perawatan kritis, pediatri, atau gerontologi, Anda dapat mengembangkan karir yang lebih spesifik. Permintaan untuk perawat terampil terus meningkat, memberikan stabilitas karir dan peluang perkembangan yang luas.",
+            "Guru": "Analisis kami menunjukkan passion Anda untuk berbagi pengetahuan dan membimbing orang lain berkembang. Anda memiliki kombinasi unik dari kesabaran, komunikasi jelas, dan kemampuan beradaptasi dengan kebutuhan berbeda. Sebagai Guru, Anda akan membentuk masa depan melalui pendidikan dan menemukan makna dalam kontribusi Anda terhadap perkembangan generasi berikutnya. Peran ini membutuhkan pemahaman mendalam tentang materi pelajaran dan metodologi pengajaran yang efektif. Anda akan bertanggung jawab untuk merencanakan pelajaran, mengevaluasi kemajuan siswa, dan menciptakan lingkungan belajar yang inklusif. Dengan spesialisasi dalam tingkat pendidikan atau subjek tertentu, Anda dapat mengembangkan keahlian yang lebih mendalam. Perkembangan teknologi pendidikan membuka peluang baru untuk metode pengajaran yang inovatif dan menarik.",
+            "Desainer Grafis": "Berdasarkan jawaban Anda, kami melihat kreativitas yang kuat dan kepekaan estetika yang berkembang baik. Anda tampak nyaman dengan proyek yang membutuhkan thinking outside the box dan memiliki kemampuan mentransformasi ide menjadi visual yang impactful. Sebagai Desainer Grafis, Anda akan berkembang dalam lingkungan yang menghargai inovasi dan ekspresi kreatif. Peran ini membutuhkan penguasaan software desain, pemahaman prinsip desain, dan kemampuan berkomunikasi secara visual. Anda akan bertanggung jawab untuk menciptakan logo, layout, ilustrasi, dan elemen visual lainnya untuk berbagai media. Dengan spesialisasi dalam UI/UX design, motion graphics, atau branding, Anda dapat mengembangkan keahlian yang lebih spesifik. Permintaan untuk desainer grafis yang terampil terus meningkat seiring dengan pentingnya visual dalam komunikasi digital.",
+            "Sales Representative": "Profil Anda menunjukkan bakat alami dalam membangun hubungan, komunikasi persuasif, dan ketahanan dalam menghadapi tantangan. Anda termotivasi oleh tujuan dan enjoy lingkungan yang dinamis. Sebagai Sales Representative, Anda akan sukses dalam roles yang menawarkan otonomi dan kompensasi berdasarkan kinerja, dengan kesempatan untuk berkembang secara profesional. Peran ini membutuhkan pemahaman mendalam tentang produk/jasa yang ditawarkan dan kebutuhan pelanggan. Anda akan bertanggung jawab untuk menjangkau prospek, melakukan presentasi, dan menutup penjualan. Dengan pengembangan keterampilan negosiasi dan relationship building, Anda dapat meningkatkan performa dan membangun karir yang sukses. Kompensasi yang sering kali berbasis komisi memberikan potensi penghasilan yang tidak terbatas bagi performer terbaik.",
+            "Analisis Data": "Jawaban Anda mengungkapkan pola pikir analitis yang kuat, ketertarikan pada detail, dan kemampuan bekerja dengan informasi kompleks. Anda menghargai pendekatan sistematis dan evidence-based decision making. Sebagai Analisis Data, Anda akan berkontribusi pada insights yang berharga bagi organisasi dan berkembang dalam lingkungan yang menghargai ketepatan dan keahlian teknis. Peran ini membutuhkan penguasaan tools analisis data, statistik, dan kemampuan visualisasi data. Anda akan bertanggung jawab untuk mengumpulkan, membersihkan, menganalisis, dan menginterpretasikan data untuk mendukung pengambilan keputusan bisnis. Dengan perkembangan big data dan AI, permintaan untuk analis data yang terampil terus meningkat. Sertifikasi dalam tools seperti Python, R, SQL, atau platform analytics tertentu dapat meningkatkan nilai Anda di pasar kerja."
+        };
+
+        // Variabel state
+        let currentQuestionIndex = 0;
+        let answers = [];
+        let apiKey = "";
+        let userName = "";
+        let userEmail = "";
+        let startTime = null;
+        let timerInterval = null;
+
+        // Elemen DOM
+        const homePage = document.getElementById('home-page');
+        const startPage = document.getElementById('start-page');
+        const testPage = document.getElementById('test-page');
+        const resultPage = document.getElementById('result-page');
+        const creatorPage = document.getElementById('creator-page');
+        const contactPage = document.getElementById('contact-page');
+        const progressBar = document.getElementById('progress-bar');
+        const currentQuestionElement = document.getElementById('current-question');
+        const totalQuestionsElement = document.getElementById('total-questions');
+        const questionContainer = document.getElementById('question-container');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const startBtn = document.getElementById('start-btn');
+        const startTestBtn = document.getElementById('start-test-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const downloadBtn = document.getElementById('download-btn');
+        const apiKeyInput = document.getElementById('api-key');
+        const nameInput = document.getElementById('name');
+        const emailInput = document.getElementById('email');
+        const jobTitleElement = document.getElementById('job-title');
+        const jobDescriptionElement = document.getElementById('job-description');
+        const jobIconElement = document.getElementById('job-icon');
+        const aiContentElement = document.getElementById('ai-content');
+        const timerElement = document.getElementById('timer');
+        const errorContainer = document.getElementById('error-container');
+        const errorMessage = document.getElementById('error-message');
+        const contactForm = document.getElementById('contact-form');
+
+        // Inisialisasi
+        totalQuestionsElement.textContent = questions.length;
+
+        // Event Listeners
+        startBtn.addEventListener('click', startTest);
+        startTestBtn.addEventListener('click', goToStartPage);
+        prevBtn.addEventListener('click', showPreviousQuestion);
+        nextBtn.addEventListener('click', showNextQuestion);
+        restartBtn.addEventListener('click', restartTest);
+        downloadBtn.addEventListener('click', downloadResults);
+        contactForm.addEventListener('submit', handleContactSubmit);
+        
+        // Navigation
+        document.getElementById('nav-home').addEventListener('click', function(e) {
+            e.preventDefault();
+            showPage(homePage);
+        });
+        
+        document.getElementById('nav-creator').addEventListener('click', function(e) {
+            e.preventDefault();
+            showPage(creatorPage);
+        });
+        
+        document.getElementById('nav-contact').addEventListener('click', function(e) {
+            e.preventDefault();
+            showPage(contactPage);
+        });
+
+        // Fungsi untuk menampilkan halaman
+        function showPage(page) {
+            document.querySelectorAll('.page').forEach(p => {
+                p.classList.remove('active');
+            });
+            page.classList.add('active');
+            window.scrollTo(0, 0);
+        }
+
+        // Fungsi untuk pergi ke halaman mulai
+        function goToStartPage() {
+            showPage(startPage);
+        }
+
+        // Fungsi untuk memulai tes
+        function startTest() {
+            apiKey = apiKeyInput.value.trim();
+            userName = nameInput.value.trim();
+            userEmail = emailInput.value.trim();
+            
+            if (!apiKey) {
+                showAlert('Silakan masukkan API Key Gemini Anda.', 'danger');
+                return;
+            }
+            
+            if (!userName) {
+                showAlert('Silakan masukkan nama Anda.', 'danger');
+                return;
+            }
+            
+            if (!userEmail) {
+                showAlert('Silakan masukkan email Anda.', 'danger');
+                return;
+            }
+            
+            // Validasi API key sederhana
+            if (!isValidApiKey(apiKey)) {
+                showAlert('Format API Key tidak valid. Silakan periksa kembali.', 'danger');
+                return;
+            }
+            
+            // Inisialisasi jawaban
+            answers = new Array(questions.length).fill(null);
+            
+            // Tampilkan halaman tes
+            showPage(testPage);
+            
+            // Mulai timer
+            startTimer();
+            
+            // Tampilkan pertanyaan pertama
+            showQuestion(0);
+        }
+
+        // Fungsi untuk menampilkan pertanyaan
+        function showQuestion(index) {
+            currentQuestionIndex = index;
+            currentQuestionElement.textContent = index + 1;
+            
+            // Update progress bar
+            const progressPercentage = ((index + 1) / questions.length) * 100;
+            progressBar.style.width = `${progressPercentage}%`;
+            
+            // Tampilkan atau sembunyikan tombol sebelumnya
+            prevBtn.disabled = index === 0;
+            
+            // Ubah teks tombol selanjutnya jika di pertanyaan terakhir
+            nextBtn.innerHTML = index === questions.length - 1 ? 
+                'Selesai<i class="fas fa-check ms-2"></i>' : 
+                'Selanjutnya<i class="fas fa-arrow-right ms-2"></i>';
+            
+            // Buat elemen pertanyaan
+            questionContainer.innerHTML = `
+                <div class="card mb-3">
+                    <div class="card-body">
+                        <h5 class="card-title">Pertanyaan ${index + 1}</h5>
+                        <p class="card-text fs-5">${questions[index]}</p>
+                        
+                        <div class="options-container mt-4">
+                            ${answerOptions.map((option, i) => `
+                                <div class="option-card ${answers[index] === i ? 'selected' : ''}">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" name="question-${index}" 
+                                            id="option-${index}-${i}" value="${i}" 
+                                            ${answers[index] === i ? 'checked' : ''}>
+                                        <label class="form-check-label" for="option-${index}-${i}">
+                                            ${option}
+                                        </label>
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // Tambahkan event listener untuk opsi jawaban
+            const radioInputs = questionContainer.querySelectorAll('input[type="radio"]');
+            radioInputs.forEach(radio => {
+                radio.addEventListener('change', (e) => {
+                    // Simpan jawaban
+                    answers[index] = parseInt(e.target.value);
+                    
+                    // Tandai opsi yang dipilih
+                    document.querySelectorAll('.option-card').forEach(card => {
+                        card.classList.remove('selected');
+                    });
+                    
+                    e.target.closest('.option-card').classList.add('selected');
+                });
+            });
+        }
+
+        // Fungsi untuk menampilkan pertanyaan sebelumnya
+        function showPreviousQuestion() {
+            if (currentQuestionIndex > 0) {
+                showQuestion(currentQuestionIndex - 1);
+            }
+        }
+
+        // Fungsi untuk menampilkan pertanyaan berikutnya
+        function showNextQuestion() {
+            // Validasi jika jawaban belum dipilih
+            if (answers[currentQuestionIndex] === null) {
+                showAlert('Silakan pilih jawaban terlebih dahulu.', 'warning');
+                return;
+            }
+            
+            // Jika sudah di pertanyaan terakhir, tampilkan hasil
+            if (currentQuestionIndex === questions.length - 1) {
+                finishTest();
+                return;
+            }
+            
+            // Tampilkan pertanyaan berikutnya
+            showQuestion(currentQuestionIndex + 1);
+        }
+
+        // Fungsi untuk menyelesaikan tes
+        function finishTest() {
+            // Hentikan timer
+            stopTimer();
+            
+            // Analisis hasil
+            analyzeResults();
+            
+            // Tampilkan halaman hasil
+            showPage(resultPage);
+        }
+
+        // Fungsi untuk menganalisis hasil
+        function analyzeResults() {
+            // Sembunyikan error container
+            errorContainer.classList.add('d-none');
+            
+            // Hitung skor berdasarkan jawaban
+            const scores = {
+                analytical: 0,
+                creative: 0,
+                introvert: 0,
+                extrovert: 0,
+                endurance: 0,
+                power: 0,
+                independent: 0,
+                collaborative: 0
+            };
+            
+            // Logika penilaian (contoh sederhana)
+            answers.forEach((answer, index) => {
+                // Konversi jawaban ke skor (0-4)
+                const score = 4 - answer;
+                
+                // Pertanyaan analitis vs kreatif
+                if ([2, 6, 14, 19, 24].includes(index)) {
+                    scores.analytical += score;
+                }
+                
+                // Pertanyaan introvert vs extrovert
+                if ([0, 8, 16, 20, 22].includes(index)) {
+                    scores.extrovert += score;
+                } else if ([1, 9, 13, 17, 21].includes(index)) {
+                    scores.introvert += (4 - score);
+                }
+                
+                // Pertanyaan endurance vs power
+                if ([3, 10, 11, 18, 23].includes(index)) {
+                    scores.endurance += score;
+                } else if ([4, 5, 7, 12, 15].includes(index)) {
+                    scores.power += (4 - score);
+                }
+            });
+            
+            // Tentukan pekerjaan berdasarkan skor
+            let jobIndex = 0;
+            if (scores.analytical > 10 && scores.introvert > scores.extrovert) {
+                jobIndex = 0; // Software Developer
+            } else if (scores.creative > 10 && scores.extrovert > scores.introvert) {
+                jobIndex = 1; // Marketing Manager
+            } else if (scores.analytical > 10 && scores.endurance > scores.power) {
+                jobIndex = 2; // Akuntan
+            } else if (scores.endurance > 10 && scores.collaborative > scores.independent) {
+                jobIndex = 3; // Perawat
+            } else if (scores.collaborative > 10 && scores.creative > scores.analytical) {
+                jobIndex = 4; // Guru
+            } else if (scores.creative > 10 && scores.independent > scores.collaborative) {
+                jobIndex = 5; // Desainer Grafis
+            } else if (scores.extrovert > 10 && scores.power > scores.endurance) {
+                jobIndex = 6; // Sales Representative
+            } else {
+                jobIndex = 7; // Analisis Data
+            }
+            
+            // Tampilkan hasil
+            const job = jobTypes[jobIndex];
+            jobTitleElement.textContent = job.title;
+            jobDescriptionElement.innerHTML = `<p>${job.description}</p>`;
+            jobIconElement.className = `fas ${job.icon} display-1 text-primary mb-3`;
+            
+            // Coba dapatkan analisis dari API Gemini
+            getGeminiAnalysis(job.title, scores)
+                .then(analysis => {
+                    // Tampilkan analisis AI
+                    aiContentElement.innerHTML = `<p>${analysis}</p>`;
+                })
+                .catch(error => {
+                    // Jika API error, tampilkan analisis default
+                    aiContentElement.innerHTML = `<p>${aiResponses[job.title]}</p>`;
+                    
+                    // Tampilkan error message
+                    errorMessage.textContent = `Error: ${error.message}. Menggunakan analisis default.`;
+                    errorContainer.classList.remove('d-none');
+                });
+            
+            // Tampilkan statistik
+            updateStatistics(scores);
+        }
+
+        // Fungsi untuk mendapatkan analisis dari Gemini API
+        async function getGeminiAnalysis(jobTitle, scores) {
+            // Simulasi API call dengan timeout
+            return new Promise((resolve, reject) => {
+                // Simulasi delay jaringan
+                setTimeout(() => {
+                    // Validasi API key (dalam implementasi nyata, ini akan memeriksa dengan Gemini API)
+                    if (!isValidApiKey(apiKey)) {
+                        reject(new Error('API Key tidak valid'));
+                        return;
+                    }
+                    
+                    // Jika API key valid, kembalikan analisis yang lebih detail
+                    let analysis = aiResponses[jobTitle];
+                    
+                    // Tambahkan informasi spesifik berdasarkan skor
+                    analysis += `\n\nBerdasarkan jawaban Anda, kami menemukan bahwa Anda memiliki:\n`;
+                    analysis += `- Skor Analitis: ${scores.analytical}/20\n`;
+                    analysis += `- Skor Kreativitas: ${scores.creative}/20\n`;
+                    analysis += `- Skor Introvert: ${scores.introvert}/20\n`;
+                    analysis += `- Skor Extrovert: ${scores.extrovert}/20\n`;
+                    analysis += `- Skor Endurance: ${scores.endurance}/20\n`;
+                    analysis += `- Skor Power: ${scores.power}/20\n\n`;
+                    analysis += `Profil ini sangat sesuai dengan karir ${jobTitle}.`;
+                    
+                    resolve(analysis);
+                }, 2000); // Simulasi delay 2 detik
+            });
+        }
+
+        // Fungsi untuk memvalidasi API key (sederhana)
+        function isValidApiKey(key) {
+            // Dalam implementasi nyata, ini akan memvalidasi dengan Gemini API
+            // Di sini kita hanya melakukan validasi format sederhana
+            return key && key.length > 20 && key.startsWith('AIza');
+        }
+
+        // Fungsi untuk memperbarui statistik
+        function updateStatistics(scores) {
+            // Hitung persentase
+            const introvertPercent = Math.round((scores.introvert / (scores.introvert + scores.extrovert)) * 100);
+            const endurancePercent = Math.round((scores.endurance / (scores.endurance + scores.power)) * 100);
+            const analyticalPercent = Math.round((scores.analytical / (scores.analytical + 10)) * 100);
+            const collaborativePercent = Math.round((scores.collaborative / (scores.collaborative + 10)) * 100);
+            
+            // Update progress bars
+            document.querySelectorAll('.progress-bar')[0].style.width = `${100 - introvertPercent}%`;
+            document.querySelectorAll('.progress-bar')[0].textContent = `${100 - introvertPercent}% Extrovert`;
+            
+            document.querySelectorAll('.progress-bar')[1].style.width = `${100 - endurancePercent}%`;
+            document.querySelectorAll('.progress-bar')[1].textContent = `${100 - endurancePercent}% Power`;
+            
+            document.querySelectorAll('.progress-bar')[2].style.width = `${analyticalPercent}%`;
+            document.querySelectorAll('.progress-bar')[2].textContent = `${analyticalPercent}% Analitis`;
+            
+            document.querySelectorAll('.progress-bar')[3].style.width = `${collaborativePercent}%`;
+            document.querySelectorAll('.progress-bar')[3].textContent = `${collaborativePercent}% Kolaboratif`;
+        }
+
+        // Fungsi untuk mengulang tes
+        function restartTest() {
+            // Reset state
+            currentQuestionIndex = 0;
+            answers = [];
+            
+            // Kembali ke halaman mulai
+            showPage(startPage);
+            
+            // Reset form
+            apiKeyInput.value = "";
+            nameInput.value = "";
+            emailInput.value = "";
+        }
+
+        // Fungsi untuk mendownload hasil
+        function downloadResults() {
+            showAlert('Fitur download hasil akan segera tersedia!', 'info');
+        }
+
+        // Fungsi untuk menangani submit form kontak
+        function handleContactSubmit(e) {
+            e.preventDefault();
+            showAlert('Pesan Anda telah berhasil dikirim! Kami akan menghubungi Anda segera.', 'success');
+            contactForm.reset();
+        }
+
+        // Fungsi untuk menampilkan alert
+        function showAlert(message, type) {
+            // Buat element alert
+            const alertDiv = document.createElement('div');
+            alertDiv.className = `alert alert-${type} alert-dismissible fade show`;
+            alertDiv.innerHTML = `
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            `;
+            
+            // Tambahkan alert ke halaman
+            const container = document.querySelector('.container');
+            container.prepend(alertDiv);
+            
+            // Hapus alert setelah 5 detik
+            setTimeout(() => {
+                alertDiv.remove();
+            }, 5000);
+        }
+
+        // Fungsi timer
+        function startTimer() {
+            startTime = new Date();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function stopTimer() {
+            clearInterval(timerInterval);
+        }
+
+        function updateTimer() {
+            const now = new Date();
+            const diff = Math.floor((now - startTime) / 1000);
+            const minutes = Math.floor(diff / 60);
+            const seconds = diff % 60;
+            
+            timerElement.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
